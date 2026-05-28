@@ -26,11 +26,18 @@
     }
 
     body {
-      background: url('https://cdn.phototourl.com/free/2026-05-26-39d3f6a5-ca15-47be-beed-2081b017398a.jpg') no-repeat center center fixed;
+      background:
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
+        url('https://cdn.phototourl.com/free/2026-05-26-39d3f6a5-ca15-47be-beed-2081b017398a.jpg')
+        no-repeat center center fixed;
+
       background-size: cover;
+      background-position: center;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+
+      animation: bgZoom 20s ease-in-out infinite alternate;
     }
 
     .overlay {
@@ -132,6 +139,7 @@
       background-color: rgba(30, 41, 59, 0.8);
       border-radius:15px;
       padding:20px;
+      backdrop-filter: blur(10px);
     }
 
     .collapsible{
@@ -272,6 +280,28 @@
       font-family:'Share Tech Mono', monospace;
     }
 
+    .music-control{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      width:55px;
+      height:55px;
+      border:none;
+      border-radius:50%;
+      background:rgba(255,255,255,0.12);
+      backdrop-filter:blur(10px);
+      color:white;
+      font-size:20px;
+      cursor:pointer;
+      z-index:999;
+      transition:0.3s;
+    }
+
+    .music-control:hover{
+      transform:scale(1.08);
+      background:rgba(255,255,255,0.2);
+    }
+
     @keyframes fadeIn{
       from{opacity:0;}
       to{opacity:1;}
@@ -293,6 +323,16 @@
       50%{background-position:100% 50%;}
       100%{background-position:0% 50%;}
     }
+
+    @keyframes bgZoom{
+      0%{
+        background-size:100%;
+      }
+
+      100%{
+        background-size:110%;
+      }
+    }
   </style>
 </head>
 
@@ -311,6 +351,10 @@
 <audio id="bg-music" loop>
   <source src="https://smail.my.id/cloud/qd97wYoH1" type="audio/mpeg">
 </audio>
+
+<button id="music-btn" class="music-control">
+  ⏸️
+</button>
 
 <div id="main-content">
 
@@ -563,7 +607,7 @@
 
     document.body.removeChild(tautan);
 
-    tampilkanNotifikasi('QRIS berhasil didownload!');
+    alert('QRIS berhasil didownload!');
   }
 
   function salinNomor(nomor, id, nama) {
@@ -579,10 +623,6 @@
 
       tombol.classList.add('ter-copy');
 
-      tampilkanNotifikasi(
-        `Nomor ${nama} berhasil dicopy!`
-      );
-
       setTimeout(() => {
 
         tombol.textContent = teksAsli;
@@ -594,6 +634,31 @@
     });
 
   }
+
+  const musicBtn =
+  document.getElementById('music-btn');
+
+  const music =
+  document.getElementById('bg-music');
+
+  musicBtn.addEventListener('click', () => {
+
+    if (music.paused) {
+
+      music.play();
+
+      musicBtn.innerHTML = '⏸️';
+
+    } else {
+
+      music.pause();
+
+      musicBtn.innerHTML = '▶️';
+
+    }
+
+  });
+
 </script>
 
 </body>
